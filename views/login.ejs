@@ -1,0 +1,59 @@
+<head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+            $(document).ready(function(){
+                    var socket = io();
+
+                    $('form').change(function(c) {
+                            socket.emit('changeclass', $('#newclass').val())
+                    })
+
+                    socket.on('changeclass', function(abil){
+                            $('#atk').val(abil.atk)
+                            $('#def').val(abil.def)
+                            $('#hp').val(abil.hp)
+                            $('#mgc').val(abil.mgc)
+                    })
+            })
+    </script>
+</head>
+
+<link href="/grid.css" rel="stylesheet" type="text/css">
+<div id="login">
+        <div id="title">
+                <h2>Adventure Begins Here!</h2>
+        </div>
+        <div id="loginForm">
+                <form method='post' action='/login'>
+                        <p>Enter Adventurer Name:</p>
+                        <input type="text" name="adventurer" id="login_name" /><br>
+                        <label>Class: </label>
+                        <select name="class" id="newclass">
+                                <% for (var c in char) { %>
+                                        <option value="<%= char[c].classes %>"><%= char[c].classes %></option>
+                                <% } %>
+                        </select>
+                <table>
+                        <tr>
+                                <td><label>Attack</label></td>
+                                <td><input readonly="readonly" type="number" name="atk" id="atk" value="<%= char[0].atk %>" /></td>
+                        </tr>
+                        <tr>
+                                <td><label>Defense</label></td>
+                                <td><input readonly="readonly" type="number" name="def" id="def" value="<%= char[0].def %>" /></td>
+                        </tr>
+                        <tr>
+                                <td><label>HitPoints</label></td>
+                                <td><input readonly="readonly" type="number" name="hp" id="hp" value="<%= char[0].hp %>" /></td>
+                        </tr>
+                        <tr>
+                                <td><label>Magic</label></td>
+                                <td><input readonly="readonly" type="number" name="mgc" id="mgc" value="<%= char[0].mgc %>" /></td>
+                        </tr>
+                </table>
+                <br>
+                <button class="rndButton">Begin</button>
+                </form>
+        </div>
+</div>

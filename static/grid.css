@@ -1,0 +1,105 @@
+body {
+    background-color: palegoldenrod;
+    color: #767cbe;
+}
+
+h2 {
+    color: darkblue;
+    text-shadow: 0 0 4px darkgoldenrod;
+}
+
+#grid_css {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+}
+
+#chat {
+    grid-column: 1/4;
+    grid-row: 1/3;
+    height: 30rem;
+    border: 4px solid goldenrod;
+    text-align: top;
+}
+
+#characters {
+    grid-column: 4;
+    grid-row: 1/3;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 5px;
+    grid-auto-rows: minmax(100px, auto);
+}
+
+#talk {
+    width: 90%;
+}
+
+#list {
+    grid-column: 1;
+    grid-row: 14/18;
+    color: darkslateblue;
+}
+
+#chitchat {
+    width: 70%;
+    position: relative;
+    bottom: 5%;
+    left: 5%;
+}
+
+#map {
+    height:70%;
+    border-bottom: 2px ridge goldenrod;
+    background-color: #eae6d5;
+}
+
+#messages {
+    height: 20%;
+    overflow: auto;
+}
+
+button {
+    background-color: silver;
+    color: whitesmoke;
+    border-radius:  0 1em 1em 0;
+    outline: none;
+}
+
+.rndButton {
+    background-color: silver;
+    color: whitesmoke;
+    border-radius: 1em;
+    outline: none;
+}
+
+#room {
+    width: 600px;
+    height: 320px;
+}
+
+#login {
+    display: grid;
+    width: 100%;
+    grid-template-areas:    "title"
+                            "loginForm";
+}
+
+#title {
+    grid-area: title;
+    margin-left: 20%;
+}
+
+#loginForm {
+    grid-area: loginForm;
+    margin-left: 15%;
+}
+
+.lt {
+    text-decoration: line-through;
+}
+
+select {
+    margin: 15px 5px;
+}

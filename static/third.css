@@ -1,0 +1,43 @@
+* {
+    border: 1px solid red;
+    padding: 0;
+    margin: 0;
+}
+
+#main {
+    height: 100%;
+}
+
+#chat {
+    border:2px solid blue;
+    width: 44%;
+    display: inline-block;
+}
+
+#map {
+    height: 80%;
+    border: 2px solid yellow;
+}
+
+#chitchat {
+    border: 2px solid orange;
+    height: 20%;
+}
+
+#list {
+    height: 80%;
+}
+
+#talk {
+    height: 20%;
+    border: 2px solid green;
+}
+
+#stats {
+    display: inline-block;
+}
+
+#monster {
+    border: 2px solid black;
+    display: inline-block;
+}

@@ -1,0 +1,125 @@
+<head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        var x="<%= user.adventurer %>";
+        $(function () {
+            const socket = io();
+            $('#taketurn').submit(function(t) {
+                t.preventDefault();
+                var charaction = $('input[name="action"]:checked').val()
+                var xchar = x
+                socket.emit('take turn', {action: charaction, char: xchar})
+                $('input[name="action"]').prop('checked', false)
+                return false
+            })
+            $('#chitchat').submit(function(e) {
+                e.preventDefault(); // prevents page reloading
+                var xmessage = {message: $('#talk').val(), sender: x}
+                socket.emit('chat message', xmessage)
+                $('#talk').val('');
+                return false;
+            })
+            socket.on('chat message', function(msg){
+                $('#messages').prepend($('<li>').text(msg.sender + ": " + msg.message))
+            })
+            socket.on('move action', function(msg) {
+                $('#drawing').attr('height', msg.height)
+                $('#drawing').attr('width', msg.width)
+                $('#drawing').attr('x', msg.wallx)
+                $('#drawing').attr('y', msg.wally)
+                $('[id^=door]').remove()
+                $('#exits').empty()
+                for (let i = 0; i < msg.params.door.length; i++) {
+                    $('#room').append('<rect id="door'+i+'" />')
+                    $('#door'+i).attr('x', msg.params.door[i].x)
+                    $('#door'+i).attr('y', msg.params.door[i].y+20)
+                    $('#door'+i).attr('width', 12)
+                    $('#door'+i).attr('height', 24)
+                    $('#door'+i).attr('style', "fill:#555555")
+                    $('#exits').append('<input type="radio" name="action" value="m'+
+                        msg.params.door[i].to+'">Move to '+msg.params.door[i].to+'<br>')
+                }
+                $('#room').html(function(){return this.innerHTML})
+                $('#messages').prepend($('<li>').text(msg.char+' has moved to '+msg.params.name))
+            })
+        })
+    </script>
+</head>
+<body>
+    <link href="/grid.css" rel="stylesheet" type="text/css">
+
+    <h2>The Adventure of ... <%= user.adventurer %>!</h2>
+    <div id="grid_css">
+    <div id="chat">
+    <div id="map">
+        <svg id="room" >
+            <rect id="drawing" x="<%= dungeon.wallx %>" y="<%= dungeon.wally %>" rx="1" ry="1"
+                width = "<%= dungeon.width %>" height="<%= dungeon.height %>"
+                stroke="gray" stroke-width="16"
+                style="fill:black;"
+            />
+            <% for (var j in dungeon.params.door) { %>
+                <rect id="door<%= j %>" x="<%= dungeon.params.door[j].x %>"
+                    y="<%= dungeon.params.door[j].y %>"
+                    width="12" height="24" style="fill:#555555"
+                />
+            <% } %>
+        </svg>
+    </div>
+        <div id="list">
+            <ul id="messages">
+            </ul>
+        </div>
+        <form id="chitchat" action="send">
+            <input id="talk" autocomplete="off" /><button id="chatbutton">Chat</button>
+        </form>
+    </div>
+    <div id="characters">
+        <div id="stats">
+            <h3 id="charName"><%= user.adventurer %></h3>
+            <table>
+                <th>
+                    <tr>
+                        <td>Atk:</td>
+                        <td class="attr"><%= user.atk %></td>
+                    </tr>
+                    <tr>
+                        <td>Def:</td>
+                        <td class="attr"><%= user.def %></td>
+                    </tr>
+                    <tr>
+                        <td>HP:</td>
+                        <td class="attr"><%= user.hp %></td>
+                    </tr>
+                    <tr>
+                        <td>Mgc:</td>
+                        <td class="attr"><%= user.mgc %></td>
+                    </tr>
+                </th>
+            </table>
+            <form id="taketurn" method="send">
+                <input type="radio" name="action" value="melee"><label class="lt">Melee</label><br>
+                <input type="radio" name="action" value="magic"><label class="lt">Magic</label><br>
+                <input type="radio" name="action" value="block"><label class="lt">Block</label><br>
+                <input type="radio" name="action" value="panic"><label class="lt">Panic</label><br>
+                <div id="exits">
+                    <% for (var k in dungeon.params.door) { %>
+                        <input type="radio" name="action" value="m<%= dungeon.params.door[k].to %>">
+                        Move to <%= dungeon.params.door[k].to %><br>
+                    <% } %>
+                </div>
+                <button class="rndButton">Take Turn</button>
+            </form>
+        </div>
+        <div id="monster">
+            <h3>Evil Doer</h3>
+            <p>HP: 300</p>
+            <svg width="10%" height="20%">
+                <line x1="15" y1="0" x2="15" y2="200" style="stroke:rgb(255,0,0);
+                    stroke-width: 55" />
+            </svg>
+        </div>
+    </div>
+    </div>
+</body>
